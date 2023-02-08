@@ -1,13 +1,14 @@
 // Create a tagged template lf`...` that formats text using LF line endings.
-var lf = () => {};
+const lf = () => {};
 
 // Create a tagged template cr`...` that formats text using CR line endings.
-var cr = () => {};
+const cr = () => {};
 
 // Create a tagged template crlf`...` that formats text using CRLF line endings.
-var crlf = () => {};
+const crlf = () => {};
 
 const transformLineEnding = (string, lineEnding) => {
+  const { replaceCR, replaceCRLF, replaceLF } = LineEndingReplacements;
   string = (string != null ? string.toString() : "");
 
   if (lineEnding === LineEndings.CR) {
@@ -23,24 +24,25 @@ const transformLineEnding = (string, lineEnding) => {
   return string;
 };
 
-
 const LineEndings = {
   CR: Symbol("CR"),
   LF: Symbol("LF"),
   CRLF: Symbol("CRLF")
 };
 
-replaceCR = (string, newEnding) =>
-    string.replace(/(\r+)([^\n]|$)/g, (_match, p1, p2) => {
-      return `${newEnding.repeat(p1.length)}${p2}`;
-    })
+const LineEndingReplacements = {
+  replaceCR: (string, newEnding) =>
+      string.replace(/(\r+)([^\n]|$)/g, (_match, p1, p2) => {
+        return `${newEnding.repeat(p1.length)}${p2}`;
+      }),
 
-replaceLF = (string, newEnding) =>
-    string.replace(/([^\r]|^)(\n+)/g, (_match, p1, p2) => {
-      return `${p1}${newEnding.repeat(p2.length)}`;
-    })
+  replaceLF: (string, newEnding) =>
+      string.replace(/([^\r]|^)(\n+)/g, (_match, p1, p2) => {
+        return `${p1}${newEnding.repeat(p2.length)}`;
+      }),
 
-replaceCRLF = (string, newEnding) => string.replace(/\r\n/g, `${newEnding}`)
+  replaceCRLF: (string, newEnding) => string.replace(/\r\n/g, `${newEnding}`)
+};
 
 module.exports = {
   lf,
